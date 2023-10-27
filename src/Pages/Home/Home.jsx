@@ -1,8 +1,9 @@
+import HomeSlider from "../../components/HomeSlider/HomeSlider";
 
 const Home = () => {
     return (
         <div>
-            <h2>Home</h2>
+            <HomeSlider></HomeSlider>            
         </div>
     );
 };
