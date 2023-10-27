@@ -3,6 +3,7 @@ import CallToAction from "../../components/CallToAction/CallToAction";
 import HomeSlider from "../../components/HomeSlider/HomeSlider";
 import Products from "../../components/Products/Products";
 import Services from "../../components/Services/Services";
+import Team from "../../components/Team/Team";
 
 const Home = () => {
     return (
@@ -11,7 +12,8 @@ const Home = () => {
             <About></About>
             <Services></Services>
             <CallToAction></CallToAction>    
-            <Products></Products>   
+            <Products></Products>  
+            <Team></Team> 
         </div>
     );
 };
