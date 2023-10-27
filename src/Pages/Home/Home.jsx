@@ -1,4 +1,5 @@
 import About from "../../components/About/About";
+import CallToAction from "../../components/CallToAction/CallToAction";
 import HomeSlider from "../../components/HomeSlider/HomeSlider";
 import Services from "../../components/Services/Services";
 
@@ -7,7 +8,8 @@ const Home = () => {
         <div>
             <HomeSlider></HomeSlider> 
             <About></About>
-            <Services></Services>           
+            <Services></Services>
+            <CallToAction></CallToAction>       
         </div>
     );
 };
