@@ -5,6 +5,7 @@ import HomeSlider from "../../components/HomeSlider/HomeSlider";
 import Products from "../../components/Products/Products";
 import Services from "../../components/Services/Services";
 import Team from "../../components/Team/Team";
+import Testimonial from "../../components/Testimonial/Testimonial";
 
 const Home = () => {
     return (
@@ -16,6 +17,7 @@ const Home = () => {
             <Products></Products>  
             <Team></Team> 
             <CoreFeatures></CoreFeatures>
+            <Testimonial></Testimonial>
         </div>
     );
 };
