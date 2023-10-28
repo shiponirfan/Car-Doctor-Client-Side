@@ -44,6 +44,24 @@ const Navbar = () => {
           Home
         </NavLink>
       </li>
+      {user ? (
+        <li className="text-lg font-semibold text-car-black dark:text-car-primary">
+          <NavLink
+            className={({ isActive, isPending }) =>
+              isPending
+                ? "pending"
+                : isActive
+                ? "bg-transparent text-car-primary dark:text-white hover:bg-transparent hover:text-car-primary"
+                : "hover:bg-transparent hover:text-car-primary duration-300 dark:hover:text-white"
+            }
+            to="/cartDetails"
+          >
+            My Cart
+          </NavLink>
+        </li>
+      ) : (
+        ""
+      )}
       <li className="text-lg font-semibold text-car-black dark:text-car-primary">
         <NavLink
           className={({ isActive, isPending }) =>

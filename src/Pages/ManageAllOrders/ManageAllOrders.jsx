@@ -1,20 +1,15 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import serviceimg from "../../assets/images/checkout/checkout.png";
-import { AuthContext } from "../../providers/AuthProvider";
-import { BsArrowReturnLeft } from "react-icons/bs";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-const CartDetails = () => {
-  const { user } = useContext(AuthContext);
-  const url = `http://localhost:5000/cartDetails?email=${user?.email}`;
+const ManageAllOrders = () => {
   const [carts, setCarts] = useState([]);
   useEffect(() => {
-    fetch(url)
+    fetch("http://localhost:5000/cartDetails")
       .then((res) => res.json())
       .then((data) => {
         setCarts(data);
       });
-  }, [url]);
+  }, []);
   const handleStatusUpdate = (id) => {
     const updatedStatus = { status: "Approved" };
     fetch(`http://localhost:5000/cartDetails/${id}`, {
@@ -78,11 +73,11 @@ const CartDetails = () => {
           />
         </div>
         <div className="absolute px-28 flex items-center  top-0 left-0 w-full h-full bg-gradient-to-r from-car-black to-[rgba(21, 21, 21, 0.00) 100%)] rounded-xl">
-          <h2 className="text-5xl font-bold text-white">Cart Details</h2>
+          <h2 className="text-5xl font-bold text-white">Manage All Orders</h2>
         </div>
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 bg-car-primary rounded-tl-xl rounded-tr-xl">
           <h3 className="font-medium text-xl text-white py-4 px-12">
-          Home - Product Details
+            Home - Manage All Orders
           </h3>
         </div>
       </div>
@@ -167,18 +162,9 @@ const CartDetails = () => {
             </tbody>
           </table>
         </div>
-        <div className="mt-12">
-          <Link
-            className="flex items-center text-car-gray duration-300 hover:text-car-primary"
-            to="/"
-          >
-            <BsArrowReturnLeft className="text-xl mr-4" />
-            <span className="text-xl ">Continue Shopping</span>
-          </Link>
-        </div>
       </div>
     </div>
   );
 };
 
-export default CartDetails;
+export default ManageAllOrders;

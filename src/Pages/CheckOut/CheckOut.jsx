@@ -1,9 +1,12 @@
 import { useLoaderData } from "react-router-dom";
 import serviceimg from "../../assets/images/checkout/checkout.png";
 import { toast } from "react-toastify";
+import { useContext } from "react";
+import { AuthContext } from "../../providers/AuthProvider";
 const CheckOut = () => {
   const service = useLoaderData();
   const { _id, img, price, title } = service;
+  const {user} = useContext(AuthContext);
   const handleCheckout = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -72,7 +75,8 @@ const CheckOut = () => {
             <input
               type="text"
               name="name"
-              placeholder="First Name"
+              placeholder="Your Name"
+              defaultValue={user?.displayName}
               className="input w-full h-16"
             />
             <input
@@ -92,6 +96,8 @@ const CheckOut = () => {
             <input
               type="email"
               name="email"
+              defaultValue={user?.email}
+              readOnly
               placeholder="Your Email"
               className="input w-full h-16"
             />
