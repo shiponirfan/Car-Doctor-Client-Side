@@ -1,5 +1,52 @@
+import { useLoaderData } from "react-router-dom";
 import serviceimg from "../../assets/images/checkout/checkout.png";
+import { toast } from "react-toastify";
 const CheckOut = () => {
+  const service = useLoaderData();
+  const { _id, img, price, title } = service;
+  const handleCheckout = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.name.value;
+    const date = form.date.value;
+    const number = form.number.value;
+    const email = form.email.value;
+    const message = form.message.value;
+    const checkoutData = {
+      img,
+      title,
+      price,
+      date,
+      email,
+      serviceId: _id,
+      status: "Pending",
+      number,
+      name,
+      message,
+    };
+    fetch("http://localhost:5000/cartDetails", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(checkoutData),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.insertedId) {
+          toast.success("Checkout Successfully", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      });
+  };
   return (
     <div>
       <div className="relative">
@@ -20,15 +67,17 @@ const CheckOut = () => {
         </div>
       </div>
       <div className="my-32 p-24 bg-[#F3F3F3] rounded-xl">
-        <form className="space-y-6">
+        <form onSubmit={handleCheckout} className="space-y-6">
           <div className="flex gap-6">
             <input
               type="text"
+              name="name"
               placeholder="First Name"
               className="input w-full h-16"
             />
             <input
-              type="text"
+              type="date"
+              name="date"
               placeholder="Last Name"
               className="input w-full h-16"
             />
@@ -36,16 +85,19 @@ const CheckOut = () => {
           <div className="flex gap-6">
             <input
               type="number"
+              name="number"
               placeholder="Your Phone"
               className="input w-full h-16"
             />
             <input
               type="email"
+              name="email"
               placeholder="Your Email"
               className="input w-full h-16"
             />
           </div>
           <textarea
+            name="message"
             className="textarea textarea-bordered w-full h-64"
             placeholder="Your Message"
           ></textarea>

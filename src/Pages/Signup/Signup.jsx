@@ -3,8 +3,40 @@ import loginImg from "../../assets/images/login/login.svg";
 import facebook from "../../assets/icons/facebook.svg";
 import linkedin from "../../assets/icons/linkedin.svg";
 import instagram from "../../assets/icons/instagram.svg";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../../providers/AuthProvider";
+import { toast } from "react-toastify";
 const Signup = () => {
+  const { signUpUser } = useContext(AuthContext);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const handleSignup = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    signUpUser(email, password)
+      .then((user) => {
+        if (user?.user) {
+          toast.success("Sign Up Successfully", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          navigate(location?.state ? location.state : "/");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <div className="flex gap-6 items-center pt-10 pb-32">
       <div className="w-1/2">
@@ -14,7 +46,7 @@ const Signup = () => {
         <h2 className="font-semibold text-5xl text-car-black mb-12 text-center">
           Sign Up
         </h2>
-        <form>
+        <form onSubmit={handleSignup}>
           <div className="form-control w-full mb-8">
             <label className="label">
               <span className="label-text font-semibold text-lg text-car-black">
@@ -23,6 +55,7 @@ const Signup = () => {
             </label>
             <input
               type="text"
+              name="name"
               placeholder="Your name"
               className="input input-bordered w-full h-16"
             />
@@ -35,6 +68,7 @@ const Signup = () => {
             </label>
             <input
               type="email"
+              name="email"
               placeholder="Your email"
               className="input input-bordered w-full h-16"
             />
@@ -47,6 +81,7 @@ const Signup = () => {
             </label>
             <input
               type="password"
+              name="password"
               placeholder="Your password"
               className="input input-bordered w-full h-16"
             />

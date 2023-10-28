@@ -5,11 +5,14 @@ import ServiceDetails from "../pages/ServiceDetails/ServiceDetails";
 import CheckOut from "../pages/CheckOut/CheckOut";
 import Signup from "../pages/Signup/Signup";
 import Login from "../pages/Login/Login";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
+import PrivateRoutes from "./PrivateRoutes";
 
 const Routes = createBrowserRouter([
   {
     path: "/",
     element: <Main></Main>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         path: "/",
@@ -30,7 +33,7 @@ const Routes = createBrowserRouter([
       },
       {
         path: "/checkout/:id",
-        element: <CheckOut></CheckOut>,
+        element: <PrivateRoutes><CheckOut></CheckOut></PrivateRoutes>,
         loader: ({params}) => fetch(`http://localhost:5000/service/${params.id}`)
       },
     ]},
