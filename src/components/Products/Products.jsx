@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "./ProductCard";
+import useAxiosSecure from "./../../hooks/useAxiosSecure";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
+  const axiosSecure = useAxiosSecure();
   useEffect(() => {
-    fetch("http://localhost:5000/products")
-      .then((res) => res.json())
-      .then((data) => setProducts(data));
-  }, []);
+    axiosSecure.get("/products").then((res) => {
+      setProducts(res.data);
+    });
+  }, [axiosSecure]);
   return (
     <div>
       <div className="space-y-5 text-center max-w-3xl mx-auto">

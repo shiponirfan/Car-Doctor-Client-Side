@@ -1,12 +1,13 @@
 import { useLoaderData } from "react-router-dom";
 import serviceimg from "../../assets/images/checkout/checkout.png";
 import { toast } from "react-toastify";
-import { useContext } from "react";
-import { AuthContext } from "../../providers/AuthProvider";
+import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 const CheckOut = () => {
+  const axiosSecure = useAxiosSecure();
   const service = useLoaderData();
   const { _id, img, price, title } = service;
-  const {user} = useContext(AuthContext);
+  const { user } = useAuth();
   const handleCheckout = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -27,28 +28,21 @@ const CheckOut = () => {
       name,
       message,
     };
-    fetch("http://localhost:5000/cartDetails", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(checkoutData),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.insertedId) {
-          toast.success("Checkout Successfully", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-        }
-      });
+
+    axiosSecure.post("/cartDetails", checkoutData).then((res) => {
+      if (res.data.insertedId) {
+        toast.success("Checkout Successfully", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    });
   };
   return (
     <div>

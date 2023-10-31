@@ -2,12 +2,11 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { IoSearchOutline } from "react-icons/io5";
 import logo from "../../assets/logo.svg";
-import { useContext } from "react";
-import { AuthContext } from "../../providers/AuthProvider";
 import { GoSignOut } from "react-icons/go";
 import { toast } from "react-toastify";
+import useAuth from './../../hooks/useAuth';
 const Navbar = () => {
-  const { user, logoutUser } = useContext(AuthContext);
+  const { user, logoutUser } = useAuth();
   const navigate = useNavigate();
   const handleLogOut = () => {
     logoutUser()

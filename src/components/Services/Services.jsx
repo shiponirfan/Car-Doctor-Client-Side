@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import ServiceCard from "./ServiceCard";
 import { Link } from "react-router-dom";
-
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 const Services = () => {
+  const axiosSecure = useAxiosSecure();
   const [services, setServices] = useState([]);
+  const [loadService, setLoadService] = useState(true);
   useEffect(() => {
-    fetch("http://localhost:5000/services")
-      .then((res) => res.json())
-      .then((data) => setServices(data));
-  }, []);
+    axiosSecure.get("/services").then((res) => {
+      setServices(res.data);
+      setLoadService(false);
+    });
+  }, [axiosSecure]);
   return (
     <div>
       <div className="space-y-5 text-center max-w-3xl mx-auto">
@@ -20,11 +23,18 @@ const Services = () => {
           believable.
         </p>
       </div>
-      <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6 my-14">
-        {services.map((service) => (
-          <ServiceCard key={service._id} service={service}></ServiceCard>
-        ))}
-      </div>
+      {loadService ? (
+        <div className="w-full dark:bg-gray-900 z-50 h-48 flex justify-center items-center">
+          <span className="loading loading-ring w-20 text-brand-primary dark:text-yellow-400"></span>
+        </div>
+      ) : (
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6 my-14">
+          {services.map((service) => (
+            <ServiceCard key={service._id} service={service}></ServiceCard>
+          ))}
+        </div>
+      )}
+
       <div className="text-center">
         <Link to="/">
           <button className="text-lg font-semibold text-car-primary py-4 px-7 border border-car-primary rounded-md hover:bg-car-primary hover:text-white duration-300">

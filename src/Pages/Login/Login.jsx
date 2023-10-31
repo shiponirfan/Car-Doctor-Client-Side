@@ -4,11 +4,10 @@ import facebook from "../../assets/icons/facebook.svg";
 import linkedin from "../../assets/icons/linkedin.svg";
 import instagram from "../../assets/icons/instagram.svg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "../../providers/AuthProvider";
 import { toast } from "react-toastify";
+import useAuth from "../../hooks/useAuth";
 const Login = () => {
-  const { loginUser } = useContext(AuthContext);
+  const { loginUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const handleLogin = (e) => {

@@ -1,71 +1,59 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import serviceimg from "../../assets/images/checkout/checkout.png";
-import { AuthContext } from "../../providers/AuthProvider";
 import { BsArrowReturnLeft } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAuth from "../../hooks/useAuth";
 const CartDetails = () => {
-  const { user } = useContext(AuthContext);
-  const url = `http://localhost:5000/cartDetails?email=${user?.email}`;
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const url = `/cartDetails?email=${user?.email}`;
   const [carts, setCarts] = useState([]);
   useEffect(() => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        setCarts(data);
-      });
-  }, [url]);
+    axiosSecure.get(url).then((res) => {
+      setCarts(res.data);
+    });
+  }, [url, axiosSecure]);
   const handleStatusUpdate = (id) => {
     const updatedStatus = { status: "Approved" };
-    fetch(`http://localhost:5000/cartDetails/${id}`, {
-      method: "PATCH",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(updatedStatus),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.modifiedCount > 0) {
-          toast.success("Update Successfully", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-          const remening = carts.filter((data) => data._id !== id);
-          const newStatus = carts.find((data) => data._id === id);
-          newStatus.status = "Approved";
-          const updatedStatus = [newStatus, ...remening];
-          setCarts(updatedStatus);
-        }
-      });
+    axiosSecure.patch(`/cartDetails/${id}`, updatedStatus).then((res) => {
+      if (res.data.modifiedCount > 0) {
+        toast.success("Update Successfully", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        const remening = carts.filter((data) => data._id !== id);
+        const newStatus = carts.find((data) => data._id === id);
+        newStatus.status = "Approved";
+        const updatedStatus = [newStatus, ...remening];
+        setCarts(updatedStatus);
+      }
+    });
   };
   const handleCartDelete = (id) => {
-    fetch(`http://localhost:5000/cartDetails/${id}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.deletedCount > 0) {
-          toast.success("Delete Successfully", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-          const remening = carts.filter((data) => data._id !== id);
-          setCarts(remening);
-        }
-      });
+    axiosSecure.delete(`/cartDetails/${id}`).then((res) => {
+      if (res.data.deletedCount > 0) {
+        toast.success("Delete Successfully", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        const remening = carts.filter((data) => data._id !== id);
+        setCarts(remening);
+      }
+    });
   };
   return (
     <div>
@@ -82,7 +70,7 @@ const CartDetails = () => {
         </div>
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 bg-car-primary rounded-tl-xl rounded-tr-xl">
           <h3 className="font-medium text-xl text-white py-4 px-12">
-          Home - Product Details
+            Home - Product Details
           </h3>
         </div>
       </div>

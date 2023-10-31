@@ -1,66 +1,55 @@
 import { useEffect, useState } from "react";
 import serviceimg from "../../assets/images/checkout/checkout.png";
 import { toast } from "react-toastify";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 const ManageAllOrders = () => {
+  const axiosSecure = useAxiosSecure();
   const [carts, setCarts] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:5000/cartDetails")
-      .then((res) => res.json())
-      .then((data) => {
-        setCarts(data);
-      });
-  }, []);
+    axiosSecure.get("/cartDetails").then((res) => {
+      setCarts(res.data);
+    });
+  }, [axiosSecure]);
   const handleStatusUpdate = (id) => {
     const updatedStatus = { status: "Approved" };
-    fetch(`http://localhost:5000/cartDetails/${id}`, {
-      method: "PATCH",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(updatedStatus),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.modifiedCount > 0) {
-          toast.success("Update Successfully", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-          const remening = carts.filter((data) => data._id !== id);
-          const newStatus = carts.find((data) => data._id === id);
-          newStatus.status = "Approved";
-          const updatedStatus = [newStatus, ...remening];
-          setCarts(updatedStatus);
-        }
-      });
+
+    axiosSecure.patch(`/cartDetails/${id}`, updatedStatus).then((res) => {
+      if (res.data.modifiedCount > 0) {
+        toast.success("Update Successfully", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        const remening = carts.filter((data) => data._id !== id);
+        const newStatus = carts.find((data) => data._id === id);
+        newStatus.status = "Approved";
+        const updatedStatus = [newStatus, ...remening];
+        setCarts(updatedStatus);
+      }
+    });
   };
   const handleCartDelete = (id) => {
-    fetch(`http://localhost:5000/cartDetails/${id}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.deletedCount > 0) {
-          toast.success("Delete Successfully", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-          const remening = carts.filter((data) => data._id !== id);
-          setCarts(remening);
-        }
-      });
+    axiosSecure.delete(`/cartDetails/${id}`).then((res) => {
+      if (res.data.deletedCount > 0) {
+        toast.success("Delete Successfully", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        const remening = carts.filter((data) => data._id !== id);
+        setCarts(remening);
+      }
+    });
   };
   return (
     <div>
